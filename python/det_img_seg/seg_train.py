@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 """
 Training class for instance segmentation using detectron2
 """
@@ -39,12 +41,13 @@ class SegTrainer():
         MetadataCatalog.get("seg_train").set(thing_calsses=self.thing_classes)
         # get the metadata
         self.metadata = MetadataCatalog.get("seg_train")
+        # initialize the config
+        self.cfg = get_cfg()
 
     def init_cfg(self):
         """
         Initialize the config
         """
-        self.cfg = get_cfg()
         self.cfg.merge_from_file(model_zoo.get_config_file(self.model))
         self.cfg.DATASETS.TRAIN = ("seg_train",)
         self.cfg.DATASETS.TEST = ()
@@ -53,17 +56,17 @@ class SegTrainer():
         self.cfg.SOLVER.IMS_PER_BATCH = 2
         self.cfg.SOLVER.BASE_LR = 0.00025
         self.cfg.SOLVER.MAX_ITER = 300
-        self.SOLVER.STEPS = []
+        self.cfg.SOLVER.STEPS = []
         self.cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128
         self.cfg.MODEL.ROI_HEADS.NUM_CLASSES = len(self.thing_classes)
         self.cfg.OUTPUT_DIR = self.output_dir
 
-    def train(self, cfg):
+    def train(self):
         """
         Train the model
         """
-        os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
-        trainer = DefaultTrainer(cfg)
+        os.makedirs(self.cfg.OUTPUT_DIR, exist_ok=True)
+        trainer = DefaultTrainer(self.cfg)
         trainer.resume_or_load(resume=False)
         trainer.train()
 
