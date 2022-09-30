@@ -2,15 +2,23 @@
 
 """
 Training class for instance segmentation using detectron2
+TODO:
+1. Prepare data as COCO format
+2. Load coco data and display ploygons
+3. Find an appropriate model from detectron2 model zoo
+4. Train the model
+5. Save the model
+6. Adjust hyperparameters
 """
 
 # common libraries
-import os
+import os, cv2, random
 # common detectron2 utilities
 from detectron2 import model_zoo
 from detectron2.engine import DefaultTrainer
 from detectron2.config import get_cfg
-from detectron2.data import MetadataCatalog
+from detectron2.data import MetadataCatalog, DatasetCatalog
+from detectron2.utils.visualizer import Visualizer
 # we use the COCO format for the dataset
 from detectron2.data.datasets import register_coco_instances
 
@@ -70,3 +78,20 @@ class SegTrainer():
         trainer.resume_or_load(resume=False)
         trainer.train()
 
+if __name__ == "__main__":
+    # try to load dataset as coco format
+    coco_dir = "/home/jiasen/data/detectron2/2020-09-30-15-33"
+    register_coco_instances("seg_train", {}, os.path.join(coco_dir, "annotations","instances_default.json"), 
+    os.path.join(coco_dir, "images"))
+    MetadataCatalog.get("seg_train").set(thing_calsses=["cheez_it"])
+    metadata = MetadataCatalog.get("seg_train")
+    print(metadata)
+    # visualize seg_train
+    dataset_dicts = DatasetCatalog.get("seg_train")
+    for d in random.sample(dataset_dicts, 3):
+        img = cv2.imread(d["file_name"])
+        visualizer = Visualizer(img[:, :, ::-1], metadata=metadata, scale=0.5)
+        vis = visualizer.draw_dataset_dict(d)
+        cv2.imshow("seg_train", vis.get_image()[:, :, ::-1])
+        cv2.waitKey(0)
+    
