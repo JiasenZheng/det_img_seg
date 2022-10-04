@@ -84,12 +84,12 @@ if __name__ == "__main__":
     MetadataCatalog.get("seg_train").set(thing_calsses=["cheez_it"])
     metadata = MetadataCatalog.get("seg_train")
     print(metadata)
-    # visualize seg_train
-    dataset_dicts = DatasetCatalog.get("seg_train")
-    for d in random.sample(dataset_dicts, 100):
-        img = cv2.imread(d["file_name"])
-        visualizer = Visualizer(img[:, :, ::-1], metadata=metadata, scale=1.0)
-        vis = visualizer.draw_dataset_dict(d)
-        cv2.imshow("seg_train", vis.get_image()[:, :, ::-1])
-        cv2.waitKey(0)
+    # # visualize seg_train
+    # dataset_dicts = DatasetCatalog.get("seg_train")
+    # for d in random.sample(dataset_dicts, 100):
+    #     img = cv2.imread(d["file_name"])
+    #     visualizer = Visualizer(img[:, :, ::-1], metadata=metadata, scale=1.0)
+    #     vis = visualizer.draw_dataset_dict(d)
+    #     cv2.imshow("seg_train", vis.get_image()[:, :, ::-1])
+    #     cv2.waitKey(0)
 
