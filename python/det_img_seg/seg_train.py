@@ -31,8 +31,6 @@ class SegTrainer():
         Initialize the SegTrainer
         """
         # check inputs
-        assert os.path.exists(model), "Model does not exist"
-        assert os.path.exists(weights), "Weights do not exist"
         assert os.path.exists(dataset_dir), "Dataset directory does not exist"
         # set up the global variables
         self.model = model
@@ -43,8 +41,8 @@ class SegTrainer():
         self.output_dir = output_dir
         self.thing_classes = thing_classes
         # register the dataset
-        register_coco_instances("seg_train", {}, os.path.join(self.dataset_dir, "train.json"), os.path.join(
-            self.dataset_dir, "train"))
+        register_coco_instances("seg_train", {}, os.path.join(self.dataset_dir, "annotations","merged.json"), os.path.join(
+            self.dataset_dir, "images"))
         # set thing classes
         MetadataCatalog.get("seg_train").set(thing_calsses=self.thing_classes)
         # get the metadata
@@ -94,4 +92,4 @@ if __name__ == "__main__":
         vis = visualizer.draw_dataset_dict(d)
         cv2.imshow("seg_train", vis.get_image()[:, :, ::-1])
         cv2.waitKey(0)
-    
+

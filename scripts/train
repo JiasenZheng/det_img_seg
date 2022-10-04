@@ -22,5 +22,18 @@ def main():
     # train the model
     trainer.train()
 
+def train():
+    """
+    Train the model
+    """
+    model = "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"
+    weights = "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"
+    dataset_dir = "/home/jiasen/data/dataset/merged"
+    output_dir = "/home/jiasen/data/model/mask_rcnn_R_50_FPN_3x"
+    thing_classes = ["cheez_it"]
+    trainer = SegTrainer(model, weights, dataset_dir, output_dir, thing_classes)
+    trainer.init_cfg()
+    trainer.train()
+
 if __name__ == "__main__":
-    main()
+    train()
